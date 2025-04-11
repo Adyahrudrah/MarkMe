@@ -38,6 +38,7 @@ function App() {
     <BookmarkContext.Provider value={{ bookmarks, refreshBookmarks }}>
       <div className="bookmarks-container">
         <div className="search-container">
+          <div className="searchWrapper">
           <input
             type="text"
             placeholder="Search bookmarks..."
@@ -45,6 +46,8 @@ function App() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
           />
+          <i className="fa-solid fa-search"></i>
+          </div>
         </div>
         <BookmarkTree
           bookmarkTree={bookmarks}
