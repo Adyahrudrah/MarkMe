@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "markMe",
+  "version": "1.0",
+  "description": "Bookmark Manager",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "bookmarks",
+    "tabs",
+    "activeTab",
+    "storage",
+    "history",
+    "contextMenus"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dist/*"
+      ],
+      "matches": ["<all_urls>"],
+      "extension_ids": ["*"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+  },
+  "host_permissions": ["*://*/*"]
+}

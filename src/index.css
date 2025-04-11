@@ -1,0 +1,248 @@
+* {
+  box-sizing: border-box;
+  font-family: "Programme", sans-serif;
+
+}
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+body {
+  background-color: #1f2937;
+  font-family: "Programme", sans-serif;
+}
+
+
+@font-face {
+  font-family: "Programme";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Programme"),
+    url("./assets/fonts/Programme-Regular.woff2") format("woff2");
+}
+
+
+.fa-solid {
+  font-size: 1rem;
+}
+.fa-bookmark{
+  font-size: 2rem;
+  margin-right: 1.2rem;
+}
+
+.context-menu {
+  background-color: #735557;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.folder-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 5px;
+  padding: 10px;
+}
+
+.folder-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  flex-grow:  1;
+  border: 3px solid #716f81;
+  border-bottom: 6px solid #716f81;
+  transition: all 0.2s;
+  color: darkgray;
+}
+
+.folder-item:hover {
+  background-color: #716f81;
+}
+
+.folder-item:hover .folder-title {
+  color: #fff;
+}
+
+.folder-item.selected {
+  background-color: #e0e0ff;
+}
+
+.folder-title {
+  margin-left: 8px;
+}
+
+.fa-folder {
+  color: #ffb74d;
+}
+
+.context-menu-header {
+  display: flex;
+  background-color:#716f81;
+  justify-content: space-between;
+  align-content: start;
+  margin-bottom: 10px;
+  padding: 0px 10px;
+  position: sticky;
+  height: max-content;
+  top: 0;
+  color: #604652;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 4px;
+}
+
+
+.bookmark-title:hover i {
+  display: block;
+}
+
+.bookmarks-container {
+  background-color: #735557;
+  border-radius: 10px;
+  padding: 1rem;
+  padding-top: 0;
+}
+.bookmarks-list {
+  margin: 20px 0px;
+  border-left: 2px solid #604652;
+  width: 90%;
+  padding: 1rem;
+  margin: 20px 20px;
+}
+
+.bookmark-folder {
+  background-color: #735557;
+  color: #c599b6;
+  padding: 0.5em;
+  display: flex;
+  border-radius: 10px;
+  margin: 20px 0px;
+  width: max-content;
+  max-width: 100dvw;
+}
+
+.bookmark-title {
+  background-color: rgba(96, 70, 82, 0.7);
+  border: 3px solid #604652;
+  border-bottom: 8px solid #604652;
+  position: sticky;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 10px;
+  top: 6rem;
+  left: 0;
+  z-index: 10;
+  font-size: 1rem;
+  font-weight: bold;
+  height: fit-content;
+  width: max-content;
+}
+
+
+
+.title-desc {
+  font-size: 0.8rem;
+}
+
+i {
+  font-style: normal;
+  font-weight: bold;
+}
+
+.bookmarkContent {
+  gap: 10px;
+}
+
+.bookmark-url {
+  background-color: #374259;
+  color: #1f2937;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  max-width: 50dvw;
+  width: max-content;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+  border-bottom: 5px solid #716f81;
+}
+
+.bookmark-url a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-favicon {
+  width: 40px;
+  margin-right: 10px;
+  position: relative;
+  border-radius: 5px;
+  float: left;
+}
+
+.bookmark-url a:visited {
+  color: #94af9f;
+}
+
+.bookmark-url a:link {
+  color: #94af9f;
+}
+
+.delete-bookmark {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 2rem;
+  margin-left: 8px;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.delete-bookmark:hover {
+  color: #ff4444;
+}
+
+.bookmarkContent {
+  display: flex;
+  align-items: center;
+}
+
+.search-container {
+  width: 100%;
+  position: sticky;
+  top: 0%;
+  background-color: #735557;
+  z-index: 100;
+}
+
+.search-container input {
+  width: 60%;
+  margin: 1% 20%;
+  outline: none;
+  border: 2px solid #604652;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: transparent;
+  font-size: 1rem;
+  color: #94af9f;
+}
+
+.search-container input::placeholder,
+.no-results {
+  color: #94af9f;
+  font-size: 1rem;
+}
