@@ -308,10 +308,10 @@ i {
 }
 
 .create-bookmark-folder {
-  background-color: #4CAF50; /* Green background */
+  background-color: #716f81; /* Green background */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 50%;
   padding: 8px 12px;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -322,25 +322,32 @@ i {
   gap: 6px;
   transition: all 0.2s ease;
   justify-self: center;
-  width: max-content;
+  width: 50px;
+  height: 50px;
   position: fixed;
   right: 1%;
   bottom: 1%;
+  justify-content: center;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.create-bookmark-folder i {
+  color: #272322;
+  font-size: 18px;
+
 }
 
 .create-bookmark-folder:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #716f81; /* Darker green on hover */
   transform: translateY(-1px);
 }
 
 .create-bookmark-folder:active {
-  background-color: #3d8b40;
+  background-color: #716f81;
   transform: translateY(0);
 }
 
-.create-bookmark-folder i {
-  font-size: 12px;
-}
+
 
 /* If you want the button to stand out more */
 /* Folder Creation Modal Styles */

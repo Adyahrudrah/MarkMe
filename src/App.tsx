@@ -85,8 +85,7 @@ function App() {
               className="create-bookmark-folder"
               onClick={openFolderCreation}
             >
-              <i className="fa-solid fa-add"></i>
-              New Folder
+              <i className="fa-solid fa-folder"></i>
             </button>
           <div className="searchWrapper">
             <input
