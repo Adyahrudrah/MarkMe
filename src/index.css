@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: "Programme", sans-serif;
+  font-family: "JetBrains Mono", sans-serif;
 
 }
 *::-webkit-scrollbar {
@@ -10,7 +10,6 @@
 }
 body {
   background-color: #272322;
-  font-family: "Programme", sans-serif;
 }
 
 
@@ -21,6 +20,15 @@ body {
   src: local("Programme"),
     url("./assets/fonts/Programme-Regular.woff2") format("woff2");
 }
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: normal;
+  src: local("JetBrains Mono"),
+    url("./assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+}
+
 
 
 .fa-solid {
@@ -35,12 +43,14 @@ body {
   background-color: #181514;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: max-contents;
-  max-height: 400px;
+  width: 500px;
+  height: 400px;
   overflow-y: auto;
 }
 
 .folder-list {
+  display: flex;
+  flex-wrap: wrap;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -55,11 +65,11 @@ body {
   align-items: center;
   border-radius: 10px;
   margin-bottom: 4px;
-  flex-grow:  1;
   border: 3px solid #716f81;
   border-bottom: 6px solid #716f81;
   transition: all 0.2s;
   color: darkgray;
+  flex-grow: 1;
 }
 
 .folder-item:hover {
@@ -118,7 +128,7 @@ body {
 }
 .bookmarks-list {
   margin: 20px 0px;
-  border-left: 2px solid #604652;
+  border-left: 0.1px solid rgba(96, 70, 82, 0.5);
   width: 90%;
   padding: 1rem;
   margin: 20px 20px;
@@ -143,7 +153,7 @@ body {
   text-align: left;
   padding: 1rem;
   border-radius: 10px;
-  top: 6rem;
+  top: 7rem;
   left: 0;
   z-index: 10;
   font-size: 1rem;
@@ -227,6 +237,8 @@ i {
   top: 0%;
   background-color: #272322;
   z-index: 100;
+  border-bottom: 0.1px solid rgba(96, 70, 82, 0.5);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .searchWrapper {
   position: relative;
@@ -258,4 +270,125 @@ i {
 .no-results {
   color: #94af9f;
   font-size: 1rem;
+  margin-left: 1rem;
 }
+
+/* Modal styles */
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.create-bookmark-folder {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  justify-self: center;
+  width: max-content;
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+}
+
+.create-bookmark-folder:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: translateY(-1px);
+}
+
+.create-bookmark-folder:active {
+  background-color: #3d8b40;
+  transform: translateY(0);
+}
+
+.create-bookmark-folder i {
+  font-size: 12px;
+}
+
+/* If you want the button to stand out more */
+/* Folder Creation Modal Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.folder-select-container {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-actions button.primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.modal-actions button.primary:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+

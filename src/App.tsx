@@ -1,12 +1,12 @@
-import { 
-  useState, 
-  useEffect, 
-  useMemo, 
-  useRef, 
-  createContext, 
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  createContext,
   useContext,
-  useCallback 
-,
+  useCallback,
+  JSX,
 } from "react";
 import type { ChromeBookmarkNode } from "./types/types";
 import "./index.css";
@@ -17,12 +17,34 @@ const BookmarkContext = createContext<{
   refreshBookmarks: () => void;
 }>({
   bookmarks: [],
-  refreshBookmarks: () => {}
+  refreshBookmarks: () => {},
 });
 
 function App() {
   const [bookmarks, setBookmarks] = useState<ChromeBookmarkNode[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderParentId, setNewFolderParentId] = useState("1"); // Default to bookmarks bar
+  const [availableFolders, setAvailableFolders] = useState<
+    ChromeBookmarkNode[]
+  >([]);
+
+  const fetchAllFolders = useCallback(() => {
+    chrome.bookmarks.getTree((tree) => {
+      const flattenFolders = (
+        nodes: ChromeBookmarkNode[]
+      ): ChromeBookmarkNode[] => {
+        return nodes.reduce<ChromeBookmarkNode[]>((acc, node) => {
+          if (node.children) {
+            return [...acc, node, ...flattenFolders(node.children)];
+          }
+          return acc;
+        }, []);
+      };
+      setAvailableFolders(flattenFolders(tree[0].children || []));
+    });
+  }, []);
 
   const refreshBookmarks = useCallback(() => {
     chrome.bookmarks.getTree((tree) => {
@@ -34,33 +56,108 @@ function App() {
     refreshBookmarks();
   }, [refreshBookmarks]);
 
+  const openFolderCreation = useCallback(() => {
+    fetchAllFolders();
+    setIsCreatingFolder(true);
+  }, [fetchAllFolders]);
+
+  const createFolder = useCallback(() => {
+    if (!newFolderName.trim()) return;
+
+    chrome.bookmarks.create(
+      {
+        parentId: newFolderParentId,
+        title: newFolderName,
+      },
+      () => {
+        refreshBookmarks();
+        setIsCreatingFolder(false);
+        setNewFolderName("");
+      }
+    );
+  }, [newFolderName, newFolderParentId, refreshBookmarks]);
+
   return (
     <BookmarkContext.Provider value={{ bookmarks, refreshBookmarks }}>
       <div className="bookmarks-container">
         <div className="search-container">
+        <button
+              className="create-bookmark-folder"
+              onClick={openFolderCreation}
+            >
+              <i className="fa-solid fa-add"></i>
+              New Folder
+            </button>
           <div className="searchWrapper">
-          <input
-            type="text"
-            placeholder="Search bookmarks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-          <i className="fa-solid fa-search"></i>
+            <input
+              type="text"
+              placeholder="Search bookmarks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <i className="fa-solid fa-search"></i>
+          
+          </div>
+         
+        </div>
+        <BookmarkTree bookmarkTree={bookmarks} searchQuery={searchQuery} />
+      </div>
+      {isCreatingFolder && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ width: "400px" }}>
+            <h3>Create New Folder</h3>
+            <div className="form-group">
+              <label>Folder Name</label>
+              <input
+                type="text"
+                placeholder="Enter folder name"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                autoFocus
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Parent Folder</label>
+              <div className="folder-select-container">
+                <ul className="folder-list">
+                  {availableFolders.map((folder) => (
+                    <li
+                      key={folder.id}
+                      className={`folder-item ${
+                        newFolderParentId === folder.id ? "selected" : ""
+                      }`}
+                      onClick={() => setNewFolderParentId(folder.id)}
+                    >
+                      <i className="fas fa-folder"></i>
+                      <span className="folder-title">{folder.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button onClick={() => setIsCreatingFolder(false)}>Cancel</button>
+              <button
+                onClick={createFolder}
+                disabled={!newFolderName.trim()}
+                className="primary"
+              >
+                Create Folder
+              </button>
+            </div>
           </div>
         </div>
-        <BookmarkTree
-          bookmarkTree={bookmarks}
-          searchQuery={searchQuery}
-        />
-      </div>
+      )}
     </BookmarkContext.Provider>
   );
 }
 
 const BookmarkTree = ({
   bookmarkTree,
-  searchQuery = ""
+  searchQuery = "",
 }: {
   bookmarkTree: ChromeBookmarkNode[];
   searchQuery?: string;
@@ -73,13 +170,15 @@ const BookmarkTree = ({
     const urlMatch = bookmark.url?.toLowerCase().includes(query) || false;
 
     if (bookmark.children) {
-      return titleMatch || bookmark.children.some(child => shouldShow(child));
+      return titleMatch || bookmark.children.some((child) => shouldShow(child));
     }
 
     return titleMatch || urlMatch;
   };
 
-  const renderBookmarkNode = (bookmark: ChromeBookmarkNode): JSX.Element | null => {
+  const renderBookmarkNode = (
+    bookmark: ChromeBookmarkNode
+  ): JSX.Element | null => {
     if (searchQuery && !shouldShow(bookmark)) return null;
 
     return (
@@ -94,7 +193,7 @@ const BookmarkTree = ({
 
   const visibleBookmarks = bookmarkTree
     .map(renderBookmarkNode)
-    .filter(node => node !== null);
+    .filter((node) => node !== null);
 
   if (searchQuery && visibleBookmarks.length === 0) {
     return <div className="no-results">No bookmarks found</div>;
@@ -106,7 +205,7 @@ const BookmarkTree = ({
 const BookmarkNode = ({
   bookmark,
   isSearchResult = false,
-  searchQuery = "" // Add this prop
+  searchQuery = "", // Add this prop
 }: {
   bookmark: ChromeBookmarkNode;
   isSearchResult?: boolean;
@@ -118,16 +217,42 @@ const BookmarkNode = ({
   const [currentFaviconIndex, setCurrentFaviconIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
-  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-  
+  const [contextMenuPosition, setContextMenuPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
   const faviconRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
+
     if (bookmark.url) {
-      setContextMenuPosition({ x: e.clientX, y: e.clientY });
+      // Get viewport dimensions
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Context menu dimensions (estimate or calculate if known)
+      const menuWidth = 500; // Adjust based on your actual menu width
+      const menuHeight = 400; // Adjust based on your actual menu height
+
+      // Calculate adjusted position
+      let x = e.clientX;
+      let y = e.clientY;
+
+      // Adjust if too close to right edge
+      if (x + menuWidth > viewportWidth) {
+        x = viewportWidth - menuWidth - 5; // 5px padding from edge
+      }
+
+      // Adjust if too close to bottom edge
+      if (y + menuHeight > viewportHeight) {
+        y = viewportHeight - menuHeight - 5; // 5px padding from edge
+      }
+
+      setContextMenuPosition({ x, y });
       setShowContextMenu(true);
     }
   };
@@ -142,8 +267,8 @@ const BookmarkNode = ({
         closeContextMenu();
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const faviconSources = useMemo(() => {
@@ -208,8 +333,8 @@ const BookmarkNode = ({
   };
 
   return (
-    <section 
-      className="bookmark-folder" 
+    <section
+      className="bookmark-folder"
       ref={containerRef}
       onContextMenu={handleContextMenu}
     >
@@ -220,8 +345,8 @@ const BookmarkNode = ({
       )}
 
       {(isSearchResult || isToggled) && bookmark.children && (
-        <BookmarkTree 
-          bookmarkTree={bookmark.children} 
+        <BookmarkTree
+          bookmarkTree={bookmark.children}
           searchQuery={searchQuery}
         />
       )}
@@ -229,41 +354,55 @@ const BookmarkNode = ({
       {!bookmark.children && (
         <div ref={nodeRef} className="bookmark-url">
           <p className="bookmarkContent">
-            {isVisible && bookmark.url && !faviconError && faviconSources.length > 0 && (
-              <img
-                ref={faviconRef}
-                src={faviconSources[currentFaviconIndex]}
-                alt="Favicon"
-                className="bookmark-favicon"
-                onError={handleFaviconError}
-                onLoad={() => setFaviconError(false)}
-              />
-            )}
+            {isVisible &&
+              bookmark.url &&
+              !faviconError &&
+              faviconSources.length > 0 && (
+                <img
+                  ref={faviconRef}
+                  src={faviconSources[currentFaviconIndex]}
+                  alt="Favicon"
+                  className="bookmark-favicon"
+                  onError={handleFaviconError}
+                  onLoad={() => setFaviconError(false)}
+                />
+              )}
             {faviconError && <i className="fas fa-bookmark"></i>}
             <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
               {bookmark.title.split(/:|-|\|/).map((t, i) =>
-                i === 0 ? <i key={i}>{t}</i> : <em key={i} className="title-desc">{t}</em>
+                i === 0 ? (
+                  <i key={i}>{t}</i>
+                ) : (
+                  <em key={i} className="title-desc">
+                    {t}
+                  </em>
+                )
               )}
             </a>
-            <button onClick={handleDelete} className="delete-bookmark" title="Delete">
+            <button
+              onClick={handleDelete}
+              className="delete-bookmark"
+              title="Delete"
+            >
               <i className="fa-solid fa-trash"></i>
             </button>
           </p>
 
           {showContextMenu && (
-            <div 
+            <div
               className="context-menu-container"
               style={{
-                position: 'fixed',
+                position: "fixed",
                 left: contextMenuPosition.x,
                 top: contextMenuPosition.y,
-                zIndex: 1000
+                zIndex: 1000,
               }}
             >
-              <BookmarkContextMenu 
+              <BookmarkContextMenu
                 bookmarkId={bookmark.id}
                 onClose={closeContextMenu}
-                currentParentId={bookmark.parentId || '1'}
+                currentParentId={bookmark.parentId || "1"}
+                searchQuery={searchQuery}
               />
             </div>
           )}
@@ -273,21 +412,25 @@ const BookmarkNode = ({
   );
 };
 
-const BookmarkContextMenu = ({ 
+const BookmarkContextMenu = ({
   bookmarkId,
   onClose,
-  currentParentId
+  currentParentId,
+  searchQuery,
 }: {
   bookmarkId: string;
   onClose: () => void;
   currentParentId: string;
+  searchQuery: string;
 }) => {
   const { refreshBookmarks } = useContext(BookmarkContext);
   const [folders, setFolders] = useState<ChromeBookmarkNode[]>([]);
 
   useEffect(() => {
     chrome.bookmarks.getTree((tree) => {
-      const flattenFolders = (nodes: ChromeBookmarkNode[]): ChromeBookmarkNode[] => {
+      const flattenFolders = (
+        nodes: ChromeBookmarkNode[]
+      ): ChromeBookmarkNode[] => {
         return nodes.reduce<ChromeBookmarkNode[]>((acc, node) => {
           if (node.children) {
             return [...acc, node, ...flattenFolders(node.children)];
@@ -295,13 +438,45 @@ const BookmarkContextMenu = ({
           return acc;
         }, []);
       };
-      setFolders(flattenFolders(tree[0].children || []).filter(f => f.id !== bookmarkId));
+      setFolders(
+        flattenFolders(tree[0].children || [])
+          .filter((f) => f.id !== bookmarkId)
+          .sort((a, b) => {
+            const aMatches = a.title
+              .toLocaleString()
+              .toLowerCase()
+              .includes(searchQuery.toLocaleString().toLowerCase());
+            const bMatches = b.title
+              .toLocaleString()
+              .toLowerCase()
+              .includes(searchQuery.toLocaleString().toLowerCase());
+
+            // If both match or neither matches, sort alphabetically
+            if (aMatches === bMatches) {
+              return a.title
+                .toLocaleString()
+                .localeCompare(b.title.toLocaleString());
+            }
+            // If a matches but b doesn't, a comes first
+            else if (aMatches) {
+              return -1;
+            }
+            // If b matches but a doesn't, b comes first
+            else {
+              return 1;
+            }
+          })
+      );
     });
   }, [bookmarkId]);
 
   const handleMove = (folderId: string) => {
     if (folderId && folderId !== currentParentId) {
-      chrome.bookmarks.move(bookmarkId, { parentId: folderId }, refreshBookmarks);
+      chrome.bookmarks.move(
+        bookmarkId,
+        { parentId: folderId },
+        refreshBookmarks
+      );
       onClose();
     }
   };
@@ -315,8 +490,8 @@ const BookmarkContextMenu = ({
         </button>
       </div>
       <ul className="folder-list">
-        {folders.map(folder => (
-          <li 
+        {folders.map((folder) => (
+          <li
             key={folder.id}
             className="folder-item"
             onClick={() => handleMove(folder.id)}
