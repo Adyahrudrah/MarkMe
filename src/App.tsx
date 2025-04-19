@@ -81,12 +81,12 @@ function App() {
     <BookmarkContext.Provider value={{ bookmarks, refreshBookmarks }}>
       <div className="bookmarks-container">
         <div className="search-container">
-        <button
-              className="create-bookmark-folder"
-              onClick={openFolderCreation}
-            >
-              <i className="fa-solid fa-folder"></i>
-            </button>
+          <button
+            className="create-bookmark-folder"
+            onClick={openFolderCreation}
+          >
+            <i className="fa-solid fa-folder"></i>
+          </button>
           <div className="searchWrapper">
             <input
               type="text"
@@ -96,9 +96,7 @@ function App() {
               className="search-input"
             />
             <i className="fa-solid fa-search"></i>
-          
           </div>
-         
         </div>
         <BookmarkTree bookmarkTree={bookmarks} searchQuery={searchQuery} />
       </div>
