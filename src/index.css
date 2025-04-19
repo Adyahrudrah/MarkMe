@@ -128,7 +128,7 @@ body {
 }
 .bookmarks-list {
   margin: 20px 0px;
-  border-left: 0.1px solid rgba(96, 70, 82, 0.5);
+  border-left: 0.1px solid #181514;
   width: 90%;
   padding: 1rem;
   margin: 20px 20px;
@@ -146,9 +146,9 @@ body {
 }
 
 .bookmark-title {
-  background-color: rgba(96, 70, 82, 0.5);
-  border: 3px solid #604652;
-  border-bottom: 8px solid #604652;
+  background-color: #181514;
+  border: 3px solid #6d1718;
+  border-bottom: 8px solid #6d1718;
   position: sticky;
   text-align: left;
   padding: 1rem;
@@ -178,7 +178,7 @@ i {
 }
 
 .bookmark-url {
-  background-color: rgba(96, 70, 82, 0.5);
+  background-color: #181514;
   color: #1f2937;
   padding: 1rem;
   border-radius: 10px;
@@ -186,7 +186,9 @@ i {
   max-width: 50dvw;
   width: max-content;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
-  border-bottom: 8px solid #604652;
+  border: 2px solid #6d1718;
+  border-left: 8px solid #6d1718;
+
 }
 
 .bookmark-url a {
@@ -237,7 +239,7 @@ i {
   top: 0%;
   background-color: #272322;
   z-index: 100;
-  border-bottom: 0.1px solid rgba(96, 70, 82, 0.5);
+  border-bottom: 0.1px solid #181514;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .searchWrapper {
@@ -251,7 +253,7 @@ i {
   width: 100%;
   margin: 4% 5%;
   outline: none;
-  border: 2px solid #604652;
+  border: 2px solid #6d1718;
   padding: 1rem;
   border-radius: 10px;
   background-color: transparent;
@@ -308,7 +310,7 @@ i {
 }
 
 .create-bookmark-folder {
-  background-color: #716f81; /* Green background */
+  background-color: #181514; /* Green background */
   color: white;
   border: none;
   border-radius: 50%;
@@ -332,7 +334,6 @@ i {
 }
 
 .create-bookmark-folder i {
-  color: #272322;
   font-size: 18px;
 
 }
