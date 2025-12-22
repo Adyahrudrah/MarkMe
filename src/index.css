@@ -1,7 +1,8 @@
+@import "tailwindcss";
+
 * {
   box-sizing: border-box;
   font-family: "JetBrains Mono", sans-serif;
-
 }
 *::-webkit-scrollbar {
   width: 0;
@@ -11,7 +12,6 @@
 body {
   background-color: #272322;
 }
-
 
 @font-face {
   font-family: "Programme";
@@ -29,12 +29,10 @@ body {
     url("./assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
 }
 
-
-
 .fa-solid {
   font-size: 1rem;
 }
-.fa-bookmark{
+.fa-bookmark {
   font-size: 2rem;
   margin-right: 1.2rem;
 }
@@ -68,7 +66,6 @@ body {
   border: 3px solid #716f81;
   border-bottom: 6px solid #716f81;
   transition: all 0.2s;
-  color: darkgray;
   flex-grow: 1;
 }
 
@@ -80,10 +77,6 @@ body {
   color: #fff;
 }
 
-.folder-item.selected {
-  background-color: #e0e0ff;
-}
-
 .folder-title {
   margin-left: 8px;
 }
@@ -92,11 +85,9 @@ body {
   color: #ffb74d;
 }
 
-
-
 .context-menu-header {
   display: flex;
-  background-color:#6d1718;
+  background-color: #6d1718;
   justify-content: space-between;
   align-content: start;
   margin-bottom: 10px;
@@ -114,7 +105,6 @@ body {
   color: #666;
   padding: 4px;
 }
-
 
 .bookmark-title:hover i {
   display: block;
@@ -162,8 +152,6 @@ body {
   width: max-content;
 }
 
-
-
 .title-desc {
   font-size: 0.8rem;
 }
@@ -188,7 +176,6 @@ i {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
   border: 2px solid #6d1718;
   border-left: 8px solid #6d1718;
-
 }
 
 .bookmark-url a {
@@ -246,7 +233,6 @@ i {
   position: relative;
   width: 30%;
   margin: 1% 35%;
-
 }
 
 .search-container input {
@@ -278,7 +264,6 @@ i {
 /* Modal styles */
 
 .modal-content {
-  background: white;
   padding: 20px;
   border-radius: 8px;
   width: 300px;
@@ -302,7 +287,6 @@ i {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -335,7 +319,6 @@ i {
 
 .create-bookmark-folder i {
   font-size: 18px;
-
 }
 
 .create-bookmark-folder:hover {
@@ -347,8 +330,6 @@ i {
   background-color: #716f81;
   transform: translateY(0);
 }
-
-
 
 /* If you want the button to stand out more */
 /* Folder Creation Modal Styles */
@@ -391,7 +372,7 @@ i {
 }
 
 .modal-actions button.primary {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
@@ -399,4 +380,3 @@ i {
   background-color: #cccccc;
   cursor: not-allowed;
 }
-

@@ -102,9 +102,12 @@ function App() {
       </div>
       {isCreatingFolder && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ width: "400px" }}>
+          <div
+            className="modal-content bg-zinc-800 text-zinc-300"
+            style={{ width: "400px" }}
+          >
             <h3>Create New Folder</h3>
-            <div className="form-group">
+            <div className="form-group bg-zinc-800">
               <label>Folder Name</label>
               <input
                 type="text"
@@ -115,7 +118,7 @@ function App() {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group ">
               <label>Parent Folder</label>
               <div className="folder-select-container">
                 <ul className="folder-list">
@@ -123,7 +126,9 @@ function App() {
                     <li
                       key={folder.id}
                       className={`folder-item ${
-                        newFolderParentId === folder.id ? "selected" : ""
+                        newFolderParentId === folder.id
+                          ? "bg-zinc-300 text-zinc-900"
+                          : "bg-zinc-800 text-zinc-300"
                       }`}
                       onClick={() => setNewFolderParentId(folder.id)}
                     >
@@ -274,6 +279,7 @@ const BookmarkNode = ({
       const url = new URL(bookmark.url);
       const hostname = url.hostname;
       return [
+        `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`,
         `${url.protocol}//${hostname}/favicon.ico`,
         `${url.protocol}//${hostname}/favicon.png`,
         `${url.protocol}//www.${hostname}/favicon.ico`,
