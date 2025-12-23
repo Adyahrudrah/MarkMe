@@ -335,6 +335,10 @@ const BookmarkNode = ({
     }
   };
 
+  const handleDeleteFolder = (bookmark: ChromeBookmarkNode) => {
+    chrome.bookmarks.remove(bookmark.id, refreshBookmarks);
+  };
+
   return (
     <section
       className="bookmark-folder"
@@ -342,9 +346,17 @@ const BookmarkNode = ({
       onContextMenu={handleContextMenu}
     >
       {bookmark.children && (
-        <span onClick={toggleBookmark} className="bookmark-title">
-          {bookmark.title.replace("_", " ")}
-        </span>
+        <div className="flex justify-between">
+          <span onClick={toggleBookmark} className="bookmark-title">
+            {bookmark.title.replace("_", " ")}
+            {bookmark.children.length === 0 && (
+              <span
+                className="fa-solid fa-trash ml-6"
+                onClick={() => handleDeleteFolder(bookmark)}
+              ></span>
+            )}
+          </span>
+        </div>
       )}
 
       {(isSearchResult || isToggled) && bookmark.children && (
@@ -486,10 +498,10 @@ const BookmarkContextMenu = ({
 
   return (
     <div className="context-menu">
-      <div className="context-menu-header">
+      <div className="context-menu-header p-2">
         <h4>Move Bookmark</h4>
         <button onClick={onClose} className="close-btn">
-          <i className="fas fa-times"></i>
+          <i className="fas fa-times text-yellow-400"></i>
         </button>
       </div>
       <ul className="folder-list">
@@ -500,7 +512,7 @@ const BookmarkContextMenu = ({
             onClick={() => handleMove(folder.id)}
           >
             <i className="fas fa-folder"></i>
-            <span className="folder-title">{folder.title}</span>
+            <span className="folder-title text-zinc-300">{folder.title}</span>
           </li>
         ))}
       </ul>
