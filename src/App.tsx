@@ -236,13 +236,15 @@ const BookmarkNode = ({
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
+      // Calculate adjusted position
+      let x = e.clientX;
+      let y = e.clientY;
+
       // Context menu dimensions (estimate or calculate if known)
       const menuWidth = 500; // Adjust based on your actual menu width
       const menuHeight = 400; // Adjust based on your actual menu height
 
-      // Calculate adjusted position
-      let x = e.clientX;
-      let y = e.clientY;
+      console.log(x, y, menuHeight);
 
       // Adjust if too close to right edge
       if (x + menuWidth > viewportWidth) {
@@ -499,12 +501,12 @@ const BookmarkContextMenu = ({
   return (
     <div className="context-menu">
       <div className="context-menu-header p-2">
-        <h4>Move Bookmark</h4>
+        <h4>Move Bookmark To</h4>
         <button onClick={onClose} className="close-btn">
           <i className="fas fa-times text-yellow-400"></i>
         </button>
       </div>
-      <ul className="folder-list">
+      <ul className="folder-list overscroll-none">
         {folders.map((folder) => (
           <li
             key={folder.id}

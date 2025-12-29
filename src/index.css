@@ -41,7 +41,6 @@ body {
   background-color: #181514;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 500px;
   height: 400px;
   overflow-y: auto;
 }
@@ -220,7 +219,7 @@ i {
 }
 
 .search-container {
-  width: 100%;
+  width: 100dvw;
   position: sticky;
   top: 0%;
   background-color: #272322;
